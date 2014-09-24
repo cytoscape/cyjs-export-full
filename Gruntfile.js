@@ -280,7 +280,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'views/{,*/}*.html',
-            'bower_components/**/*',
+            'bower_components/sass-bootstrap/fonts/*',
             'images/{,*/}*.{webp}',
             'fonts/*',
             'scripts/**/*'
