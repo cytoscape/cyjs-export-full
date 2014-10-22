@@ -110,8 +110,6 @@ angular.module('cyViewerApp')
                         }
                     }
 
-                    console.log($scope.networkNames);
-
                     while (_.contains($scope.networkNames, networkName)) {
                         networkName = networkName + '*';
                     }
@@ -120,7 +118,6 @@ angular.module('cyViewerApp')
                         $scope.networks[networkName] = network;
                         $scope.networkNames.push(networkName);
                         $scope.currentNetwork = networkName;
-                        console.log($scope.networkNames);
                     });
                     $scope.cy.load(network.elements);
                     reset();
@@ -208,7 +205,6 @@ angular.module('cyViewerApp')
 
             setInterval(function() {
                 if (updateFlag && $scope.browserState.show) {
-                    console.log('* update called');
                     $scope.$apply();
                     updateFlag = false;
                 }
@@ -246,7 +242,6 @@ angular.module('cyViewerApp')
         // Apply Visual Style
         $scope.switchVS = function() {
             var vsName = $scope.currentVS.trim();
-            console.log('New Visual Style = ' + vsName);
             var vs = $scope.visualStyles[vsName].style;
             // Apply Visual Style
             $scope.cy.style().fromJson(vs).update();
@@ -286,7 +281,6 @@ angular.module('cyViewerApp')
             var defaultNetworkName = null;
 
             _.each(_.keys(fileList), function(key) {
-                console.log(key);
                 if(key !== 'style') {
                     if(defaultNetworkName === null) {
                         defaultNetworkName = key;
@@ -295,8 +289,6 @@ angular.module('cyViewerApp')
                     $scope.networkNames.push(key);
                 }
             });
-
-            console.log('Target Network File = ' + $scope.networkNames[defaultNetworkName]);
 
             networkData = Network.get(
                 {filename: $scope.networks[defaultNetworkName]},
