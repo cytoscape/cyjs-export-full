@@ -1,23 +1,19 @@
 <div id="network" ng-style="{'background-color': bg.color}"></div>
-
 <div class="loading">
     <span us-spinner="{radius:30, width:3, length: 100}"></span>
 </div>
 
 <div class="summary" ng-show="overlayState.show">
     <h3>Network:</h3>
-    <select class="form-control" id="network-selector"
-            ng-options="networkName for networkName in networkNames" ng-change="switchNetwork()" ng-model="currentNetwork">
+    <select class="form-control" id="network-selector" ng-options="networkName for networkName in networkNames" ng-change="switchNetwork()" ng-model="currentNetwork">
     </select>
 
     <h3>Visual Style:</h3>
-    <select class="form-control" id="vs-selector"
-            ng-options="styleName for styleName in visualStyleNames" ng-change="switchVS()" ng-model="currentVS">
+    <select class="form-control" id="vs-selector" ng-options="styleName for styleName in visualStyleNames" ng-change="switchVS()" ng-model="currentVS">
     </select>
 
     <h3>Layout:</h3>
-    <select class="form-control" id="layout-selector"
-            ng-options="layoutName for layoutName in LAYOUTS" ng-change="switchLayout()" ng-model="currentLayout">
+    <select class="form-control" id="layout-selector" ng-options="layoutName for layoutName in LAYOUTS" ng-change="switchLayout()" ng-model="currentLayout">
     </select>
 </div>
 
@@ -85,5 +81,52 @@
     </div>
     <div class="icon-button" colorpicker colorpicker-position="left" ng-model="bg.color" tooltip-placement="left" tooltip="Set Background Color">
         <span class="glyphicon glyphicon-tint"></span>
+    </div>
+
+    <div ng-controller="NdexModalCtrl">
+        <script type="text/ng-template" id="myModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Search NDEx Database</h3>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="Search NDEx" ng-model="query">
+
+                <table class="table table-hover" ng-model="items" ng-hide="networkSearchResults == null || networkSearchResults.length == 0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Visibility</th>
+                            <th style="width: 10%;">Nodes</th>
+                            <th style="width: 10%;">Edges</th>
+                        </tr>
+                    </thead>
+
+                    <tbody ng-show="networkSearchResults.length > 0" ng-repeat="network in networkSearchResults">
+                        <tr ng-click="setAndDisplayCurrentNetwork(network.externalId)" style="cursor:pointer;">
+                            <td>{{network.name}}</td>
+                            </td>
+                            <td class='text-success'>{{network.visibility}}</td>
+                            <td class="AlignRight">{{network.nodeCount}}</td>
+                            <td class="AlignRight">{{network.edgeCount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="search()">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+
+        <div class="icon-button" tooltip-placement="left" tooltip-placement="left" data-toggle="modal" tooltip="Search Networks in NDEx" ng-click="open()">
+            <span class="glyphicon glyphicon-search"></span>
+        </div>
+    </div>
+
+    <div class="icon-button" tooltip-placement="left" tooltip="Upload network to NDEx" ng-click="sendNetworkToNdex()">
+        <span class="glyphicon glyphicon-cloud-upload"></span>
     </div>
 </div>

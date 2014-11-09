@@ -9,6 +9,16 @@
     <title>Cytoscape Session Viewer </title>
     <meta name="description" content="Template for visualizing JSON exported from Cytoscape">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--     <script src="bower_components/platform/platform.js"></script>
+
+    <link href="bower_components/font-roboto/roboto.html" rel="import">
+    <link href="bower_components/core-icon/core-icon.html" rel="import">
+    <link href="bower_components/core-icons/core-icons.html" rel="import">
+ -->
+    <!--<link href="bower_components/paper-button/paper-button.html" rel="import">-->
+    <!--<link href="bower_components/paper-dialog/paper-dialog.html" rel="import">-->
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
@@ -54,12 +64,19 @@
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/polymer/polymer.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+    <script src="scripts/ndex-service.js"></script>
+    
     <script src="scripts/app.js"></script>
+
     <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/ndex-controller.js"></script>
+
     <script src="scripts/services/network.js"></script>
     <script src="scripts/services/visual-styles.js"></script>
     <!-- endbuild -->

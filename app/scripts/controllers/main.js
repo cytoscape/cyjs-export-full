@@ -1,7 +1,8 @@
 /*global _, angular */
 
 angular.module('cyViewerApp')
-    .controller('MainCtrl', function($scope, $http, $location, $routeParams, $window, Network, VisualStyles) {
+    .controller('MainCtrl', ['$scope', '$http', '$location', '$routeParams', '$window', 'Network', 'VisualStyles', 'ndexService',
+        function($scope, $http, $location, $routeParams, $window, Network, VisualStyles, ndexService) {
 
         'use strict';
 
@@ -23,12 +24,16 @@ angular.module('cyViewerApp')
 
         // Application global objects
         $scope.networks = {};
+        $scope.ndexNetworks = {};
+
         $scope.currentVS = null;
         $scope.visualStyles = [];
         $scope.visualStyleNames = [];
         $scope.networkNames = [];
         $scope.currentNetworkData = null;
 
+        // Query for NDEx
+        $scope.searchQuery = null;
 
         // Show / Hide Table browser
         $scope.browserState = {
@@ -68,16 +73,17 @@ angular.module('cyViewerApp')
                 $scope.cy = this;
                 $scope.cy.load(networkData.elements);
 
-                VisualStyles.query(
-                    {filename: visualStyleFile}, function (vs) {
-                        init(vs);
-                        dropSupport();
-                        setEventListeners();
-                        $scope.currentVS = DEFAULT_VISUAL_STYLE_NAME;
-                        $scope.currentLayout = 'preset';
-                        $scope.cy.style().fromJson($scope.visualStyles[DEFAULT_VISUAL_STYLE_NAME].style).update();
-                        angular.element('.loading').remove();
-                    });
+                VisualStyles.query({
+                    filename: visualStyleFile
+                }, function(vs) {
+                    init(vs);
+                    dropSupport();
+                    setEventListeners();
+                    $scope.currentVS = DEFAULT_VISUAL_STYLE_NAME;
+                    $scope.currentLayout = 'preset';
+                    $scope.cy.style().fromJson($scope.visualStyles[DEFAULT_VISUAL_STYLE_NAME].style).update();
+                    angular.element('.loading').remove();
+                });
             }
         };
 
@@ -250,19 +256,37 @@ angular.module('cyViewerApp')
 
         $scope.switchNetwork = function() {
             var networkFile = $scope.networks[$scope.currentNetwork];
+            console.log(typeof networkFile);
+            console.log(networkFile);
 
-            networkData = Network.get(
-                {filename: networkFile},
-                function (network) {
-                    $scope.cy.load(network.elements);
-                    $scope.currentNetworkData = networkData;
-                    reset();
-                    $scope.nodes = network.elements.nodes;
-                    $scope.edges = network.elements.edges;
-                    setColumnNames();
+            if (typeof networkFile === 'object') {
+                loadNetwork(networkFile, true);
+                console.log($scope.ndexNetworks[$scope.currentNetwork]);
+                return;
+            }
+
+            networkData = Network.get({
+                    filename: networkFile
+                },
+                function(network) {
+                    loadNetwork(network, false);
                 });
 
+            function loadNetwork(network, applyLayout) {
+                $scope.cy.load(network.elements);
+                if (applyLayout) {
+                    $scope.cy.layout({
+                        name: 'grid'
+                    });
+                }
+                console.log($scope.cy.json());
 
+                $scope.currentNetworkData = networkData;
+                reset();
+                $scope.nodes = network.elements.nodes;
+                $scope.edges = network.elements.edges;
+                setColumnNames();
+            }
         };
 
         $scope.switchLayout = function() {
@@ -271,6 +295,48 @@ angular.module('cyViewerApp')
             };
             $scope.cy.layout(layoutOptions);
         };
+
+        $scope.sendNetworkToNdex = function() {
+            var cyjs = $scope.cy.json();
+            var original = $scope.ndexNetworks[$scope.currentNetwork];
+
+
+            _.each(cyjs.elements.nodes, function(node) {
+                console.log(node);
+
+                var originalNode = original.nodes[parseInt(node.data.id)];
+                var presentations = [];
+                presentations.push({
+                    name: 'cyjs:x',
+                    type: 'SimplePropertyValuePair',
+                    value: node.position['x']
+                });
+                presentations.push({
+                    name: 'cyjs:y',
+                    type: 'SimplePropertyValuePair',
+                    value: node.position['y']
+                });
+                originalNode['presentationProperties'] =presentations;
+                
+            });
+
+            console.log(original);
+            ndexService.signIn('drh', 'drh');
+            ndexService.saveSubnetwork(original, function() {
+                console.log('OK');
+            }, function() {
+
+                console.log('Error');
+            });
+        }
+
+
+        // Search network in ndex
+        $scope.$on('switchNetwork', function(event, data) {
+            console.log('Got Switch');
+            console.log(data); // 'Data to send'
+            $scope.switchNetwork();
+        });
 
         ///////////////////// Start the loading process ////////////////
 
@@ -281,8 +347,8 @@ angular.module('cyViewerApp')
             var defaultNetworkName = null;
 
             _.each(_.keys(fileList), function(key) {
-                if(key !== 'style') {
-                    if(defaultNetworkName === null) {
+                if (key !== 'style') {
+                    if (defaultNetworkName === null) {
                         defaultNetworkName = key;
                     }
                     $scope.networks[key] = fileList[key];
@@ -290,12 +356,13 @@ angular.module('cyViewerApp')
                 }
             });
 
-            networkData = Network.get(
-                {filename: $scope.networks[defaultNetworkName]},
-                function () {
+            networkData = Network.get({
+                    filename: $scope.networks[defaultNetworkName]
+                },
+                function() {
                     angular.element(NETWORK_SECTION_ID).cytoscape(options);
                     $scope.currentNetworkData = networkData;
                     $scope.currentNetwork = defaultNetworkName;
                 });
         });
-    });
+    }]);

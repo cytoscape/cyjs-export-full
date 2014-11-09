@@ -13,7 +13,10 @@ angular.module('cyViewerApp', [
     'ui.bootstrap',
     'angular-underscore',
     'colorpicker.module',
-    'angularSpinner'
+    'angularSpinner',
+    
+    // For NDEx access
+    'ndexServiceApp'
 ])
     .config(function($routeProvider) {
         // Routing
