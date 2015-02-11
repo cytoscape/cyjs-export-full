@@ -22,6 +22,10 @@ angular.module('cyViewerApp', [
         // Routing
         $routeProvider
             .when('/', {
+                templateUrl: 'views/paper.html',
+                controller: 'EmbeddedCtr'
+            })
+            .when('/full', {
                 templateUrl: 'views/main.html',
                 controller: 'MainCtrl'
             })

@@ -27,7 +27,7 @@
             }
         });
     }])
-
+    
 
     /****************************************************************************
      * NDEx HTTP Service
@@ -41,7 +41,7 @@
                 // define and initialize factory object
                 var factory = {};
 
-                var ndexServerURI = "http://test.ndexbio.org/rest";
+                var ndexServerURI = "http://www.ndexbio.org/rest";
                 // This convention is useful, but we may later allow a
                 // site configuration to explicitly specify a different host
                 //if (location.hostname.toLowerCase() != "localhost")
@@ -59,7 +59,7 @@
                  * Users
                  *---------------------------------------------------------------------*/
                 //
-                //signIn drh
+                //signIn
                 //
                 factory.signIn = function (accountName, password) {
                     ndexUtility.clearUserCredentials();
@@ -196,19 +196,19 @@
                         function(data) {
                             ndexUtility.clearUserCredentials();
                             successHandler(data);
-                        },
+                        }, 
                         errorHandler);
                 }
 
                 factory.changeAccountPassword = function(oldPassword, newPassword, successHandler, errorHandler) {
                     // not using old password because api doesnt, but might be used in the future
                     $http.defaults.headers.common['Authorization'] = ndexConfigs.getEncodedUser();
-                    UserResource.changePassword({}, newPassword,
+                    UserResource.changePassword({}, newPassword, 
                         function(data) {
                             //intercepting here to use auth token provided by user
                             ndexUtility.setUserAuthToken(newPassword);
                             successHandler(data);
-                        },
+                        }, 
                         errorHandler)
                 }
 
@@ -878,10 +878,6 @@
                     var config = ndexConfigs.getNetworkSearchConfig(searchString, accountName, permission, includeGroups, skipBlocks, blockSize);
                     config.timeout = deferredAbort.promise;
 
-                    console.log(ndexServerURI);
-                    console.log(config);
-
-
                     // We keep a reference ot the http-promise. This way we can augment it with an abort method.
                     var request = $http(config);
 
@@ -1112,11 +1108,11 @@
     ndexServiceApp.factory('ndexConfigs', function (ndexUtility) {
         var factory = {};
 
-        var ndexServerURI = "http://test.ndexbio.org/rest";
+        var ndexServerURI = "http://www.ndexbio.org/rest";
         // This convention is useful, but we may later allow a
         // site configuration to explicitly specify a different host
-        // if (location.hostname.toLowerCase() != "localhost")
-        //     ndexServerURI = "http://" + location.host + "/rest";
+        //if (location.hostname.toLowerCase() != "localhost")
+        //    ndexServerURI = "http://" + location.host + "/rest";
 
         /*---------------------------------------------------------------------*
          * GET request configuration

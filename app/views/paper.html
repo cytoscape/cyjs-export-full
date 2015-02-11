@@ -1,0 +1,67 @@
+<div class="belt light-blue">
+    <div class="container">
+        <h1 class="centering">NDEx: the Network Data Exchange</h1>
+    </div>
+</div>
+
+
+<div class="white">
+    <div class="container">
+        <h2>Authors</h2>
+
+        <p class="lead light-text">
+            Dexter Pratt, Jing Chen, David Welker, Ricardo Rivas, 
+            Rudolph Pillich, Keiichiro Ono, Barry Demchak, Trey Ideker
+        </p>
+    </div>
+</div>
+
+<div class="belt snow-white">
+    <div class="container">
+        <h2 class="centering">Summary</h2>
+        <div class="row item">
+            <div class="col-md-12">
+                <p class="lead">
+                Scientists should be able to find, review, and compute with biological networks that are based on up-to-date findings, have well-documented provenance, and include diverse types of information, including curated models, molecular interaction data, and outputs of systematic analysis. NDEx, the Network Data Exchange (www.ndexbio.org) addresses these needs by providing a public exchange where scientists can store, share and publish biological networks in diverse formats and sizes. Users manage the networks they upload, keeping some as private work in progress, sharing others for pre-publication collaboration, and releasing others for unlimited public access. Network provenance is managed, tracking the ownership and history of each unique network. Users can search for networks based on their content and annotations across different network types. Software, including scripts, web applications and Cytoscape apps can access NDEx via a REST API, a web-protocol for program access, facilitating the development of algorithms using and generating networks. 
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="narrow white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Report</h2>
+
+                <p>
+                    The computable biological network is a powerful methodology that is used to represent, visualize and analyze diverse knowledge including molecular interactions, pathway models, and relationships derived from systematic analysis of genome-scale data. Barriers to access, however, impede the use of up-to-date networks; public repositories of pathway and interaction networks lag behind the latest science and many networks produced by systematic analysis are only available in non-standard formats in the supplemental materials of publications. NDEx, the Network Data Exchange, addresses these challenges by creating a novel open-source software infrastructure and public web-portal to enable scientists and organizations to access, store, share and publish biological networks. NDEx seeks to facilitate scientific dialog involving biological networks of multiple types by providing an exchange, a framework focused on scientist-generated and managed content, in contrast to repositories of biological networks focused on the publication and delivery of specific types of network content. (NCI Pathway Interaction Database, Reactome (Croft et al., 2014), IntAct). NDEx is complementary to existing repositories, providing a mechanism for pre-publication sharing of networks between scientists and support for direct publication of networks while also giving those organizations a new distribution channel for their content. Finally, NDEx is constructed around a core server technology that provides a web protocol enabling any software to store, manage, and access networks, promoting the development of novel applications using biological networks.
+                </p>
+                <p>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <p>
+                    The public NDEx website (http://www.ndexbio.org) enables users to search and browse networks, establish accounts, create or join groups, upload, download, and administrate networks. It provides simple visualization of small networks and query results from large networks and enables the user to review the provenance history of the network. Users can also edit properties of networks that they own, such as title or description. The website is a JavaScript application that uses a web-based programming interface, a REST API, to access the public NDEx server, a database application which stores and manages networks and all related information. Critically, any program can use the REST API to access NDEx and client libraries are available in the Java, Python, and R languages to facilitate the use of the API by developers. (Figure 1C) Three utilities provided in conjunction with NDEx are examples of programs using the NDEx REST API: (1) CyNDEx is a Cytoscape app enabling user access to NDEx to search, download, and upload networks. (2) The NDEx Sync copier is a command-line utility allowing users to synchronize networks between NDEx servers, checking networks in a “source” account for changes and then creating or updating networks on a "destination" NDEx. (3) The Network Publication Viewer (NPV) enables the inclusion of networks in online publications as “live” data objects that can be queried and manipulated directly 
+                    (<a href="#/full">Figure 2</a>).
+                </p>
+            </div>
+            <div class="col-md-7">
+                <div id="embedded" ng-model="ndexId" ng-init="ndexId='aa64bc45-6ae9-11e4-a6dc-000c29202374'" 
+                    ng-style="{'background-color': bg.color}"></div>
+                <h5>Figure 2: Network Publication Viewer.  (<a href="#/full">Open in new page</a>)</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    Cytoscape 3.2 has a built-in chart editor. You can use node table data as the source of your charts
+                    and render them as high-quality vector graphics. It supports standard charts including: bar, box,
+                    line, pie, heatmap, and ring. In addition to charts, it supports gradients.
+                    
+                </p>
+    </div>
+</div>

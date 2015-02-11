@@ -25,7 +25,7 @@ angular.module('cyViewerApp')
                     console.log('Closing...');
                     console.log(network);
                     console.log(networkName);
-                   
+
                     $scope.ndexNetworks[networkName] = network.original;
                     $scope.networks[networkName] = network.cyjs;
                     $scope.networkNames.push(networkName);
@@ -103,8 +103,8 @@ angular.module('cyViewerApp')
                         // $rootScope.networkNames.push(networkName);
                         // $rootScope.currentNetwork = networkName;
                         var networkPair = {
-                          original: network,
-                          cyjs: cyjsNetwork
+                            original: network,
+                            cyjs: cyjsNetwork
                         }
                         $scope.ndexNetwork = networkPair;
 
@@ -147,11 +147,11 @@ angular.module('cyViewerApp')
                 });
 
                 var cyJsNetwork = {
-                  data: {
-                    id: network.externalId,
-                    name: network.name
-                  },
-                  elements: elements
+                    data: {
+                        id: network.externalId,
+                        name: network.name
+                    },
+                    elements: elements
                 };
 
                 return cyJsNetwork;
