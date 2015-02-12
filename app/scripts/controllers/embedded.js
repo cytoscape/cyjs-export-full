@@ -1,9 +1,9 @@
 /*global _, angular */
 
 angular.module('cyViewerApp')
-    .controller('EmbeddedCtr', ['$scope', '$http', '$location', '$routeParams', '$window', 'Network', 'VisualStyles',
+    .controller('EmbeddedCtr', ['$rootScope', '$scope', '$http', '$location', '$routeParams', '$window', 'Network', 'VisualStyles',
         'ndexService', 'networkConverterService',
-        function($scope, $http, $location, $routeParams, $window, Network, VisualStyles, ndexService, networkConverterService) {
+        function($rootScope, $scope, $http, $location, $routeParams, $window, Network, VisualStyles, ndexService, networkConverterService) {
 
             'use strict';
 
@@ -27,6 +27,7 @@ angular.module('cyViewerApp')
 
             // Application global objects
             $scope.ndexId = 'aa64bc45-6ae9-11e4-a6dc-000c29202374';
+            $rootScope.ndexId = 'aa64bc45-6ae9-11e4-a6dc-000c29202374';
             $scope.networks = {};
             $scope.ndexNetworks = {};
 
@@ -34,7 +35,7 @@ angular.module('cyViewerApp')
             $scope.visualStyles = [];
             $scope.visualStyleNames = [];
             $scope.networkNames = [];
-            $scope.currentNetworkData = null;
+            // $scope.currentNetworkData = null;
 
             // Query for NDEx
             $scope.searchQuery = null;
@@ -317,18 +318,29 @@ angular.module('cyViewerApp')
                 });
 
                 var MAX_EDGE_COUNT = 100000;
-                ndexService.getNetworkByEdges($scope.ndexId, 0, MAX_EDGE_COUNT)
-                    .success(function(ndexNetwork) {
-                        console.log(ndexNetwork);
-                        networkData = networkConverterService.toCytoscapeJs(ndexNetwork);
-                        console.log(networkData);
-                        angular.element(NETWORK_SECTION_ID).cytoscape(options);
-                        $scope.currentNetworkData = networkData;
-                        $scope.currentNetwork = defaultNetworkName;
-                    })
-                    .error(function(error) {
-                        console.log(error);
-                    });
+                if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
+                    ndexService.getNetworkByEdges($scope.ndexId, 0, MAX_EDGE_COUNT)
+                        .success(function(ndexNetwork) {
+                            console.log(ndexNetwork);
+                            networkData = networkConverterService.toCytoscapeJs(ndexNetwork);
+                            console.log(networkData);
+                            angular.element(NETWORK_SECTION_ID).cytoscape(options);
+                            $scope.currentNetworkData = networkData;
+                            $scope.currentNetwork = defaultNetworkName;
+
+                            $rootScope.ndexNetwork = networkData;
+                        })
+                        .error(function(error) {
+                            console.log(error);
+                        });
+
+                } else {
+                    console.log('Network exists: ' + $rootScope.ndexNetwork.data['name']);
+                    networkData = $rootScope.ndexNetwork;
+                    $scope.currentNetworkData = networkData;
+                    $scope.currentNetwork = defaultNetworkName;
+                    angular.element(NETWORK_SECTION_ID).cytoscape(options);
+                }
             });
         }
     ]);

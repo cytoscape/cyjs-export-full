@@ -14,35 +14,81 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 
 		$.each(ndexNetwork.nodes, function(index, node) {
 
-			var label = ndexHelper.getNodeLabel(node, ndexNetwork);
+			var nodeData = getNodeData(index, node, ndexNetwork);
 			var cyNode = {
-				data: {
-					id: index.toString(),
-					name: label
-				}
+				data: nodeData
 			};
 			elements.nodes.push(cyNode);
 
 		});
 
 		$.each(ndexNetwork.edges, function(index, edge) {
+			var edgeData = getEdgeData(edge, ndexNetwork);
+
 			var cyEdge = {
-				data: {
-					source: edge.subjectId.toString(),
-					target: edge.objectId.toString()
-				}
+				data: edgeData
 			};
 			elements.edges.push(cyEdge);
 		});
 
-		var cyJsNetwork = {
-			data: {
-				id: ndexNetwork.externalId,
-				name: ndexNetwork.name
-			},
+		var networkData = getNetworkData(ndexNetwork);
+
+		return cyJsNetwork = {
+			data: networkData,
 			elements: elements
 		};
-
-		return cyJsNetwork;
 	};
+
+
+
+	var getNetworkData = function(ndexNetwork) {
+		var data = {};
+		data.name = ndexNetwork.name;
+		data.description = ndexNetwork.description;
+		data.id = ndexNetwork.externalId;
+
+		return data;
+	};
+
+
+	var getNodeData = function(index, ndexNode, ndexNetwork) {
+		var label = ndexHelper.getNodeLabel(ndexNode, ndexNetwork);
+		var data = {
+			id: index.toString(),
+			name: label
+		}
+		return data;
+	};
+
+	var getEdgeData = function(ndexEdge, ndexNetwork) {
+		var data = {};
+		data.source = ndexEdge.subjectId.toString();
+		data.target = ndexEdge.objectId.toString();
+		data.predicateId = findTerm(ndexEdge.predicateId, ndexNetwork);
+		data.citations = [];
+
+		var len = ndexEdge.citationIds.length;
+		for(var idx = 0; idx<len; idx++) {
+			var citationObj = ndexNetwork.citations[ndexEdge.citationIds[idx].toString()];
+			data.citations.push(citationObj);
+		}
+		
+		data.supports = [];
+		len = ndexEdge.supportIds.length;
+		for(var idx = 0; idx<len; idx++) {
+			var supportObj = ndexNetwork.supports[ndexEdge.supportIds[idx].toString()];
+			data.supports.push(supportObj);
+		}
+
+		data.interaction = data.supports[0].text;
+
+		return data;
+	}
+
+	var findTerm = function(termId, ndexNetwork) {
+		var idString = termId.toString();
+		var term = ndexNetwork.baseTerms[idString];
+		return ndexHelper.getTermLabel(term, ndexNetwork);
+	};
+
 }]);
