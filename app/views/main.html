@@ -5,7 +5,7 @@
 
 
 <div class="summary" ng-show="overlayState.show">
-  <h1 class="network-title" ng-model="currentNetwork">{{currentNetwork}}</h1>
+  <h1 class="network-title" ng-model="originalNetwork.name">{{originalNetwork.name}}</h1>
 
   <h3>Visual Style:</h3>
   <select class="form-control" id="vs-selector" ng-options="styleName for styleName in visualStyleNames"
@@ -122,11 +122,15 @@
       <div class="modal-body">
         <h4>NDEx User ID</h4>
         <p>
-          <input type="accountName" class="form-control" required autofocus ng-model="credentials.username">
+          <input type="accountName" class="form-control" required autofocus placeholder="{{ credentials.username }}" ng-model="credentials.username">
         </p>
         <h4>Password</h4>
         <p>
           <input type="password" class="form-control" required ng-model="credentials.password">
+        </p>
+        <h4>New Network Name</h4>
+        <p>
+          <input ng-model="originalNetwork.name" type="text" class="form-control" placeholder="{{originalNetwork.name}}" required>
         </p>
 
 

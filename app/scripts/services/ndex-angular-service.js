@@ -24,10 +24,10 @@
                     }
                     return $q.reject(rejection);
                 }
-            }
+            };
         });
     }])
-    
+
 
     /****************************************************************************
      * NDEx HTTP Service
@@ -196,19 +196,19 @@
                         function(data) {
                             ndexUtility.clearUserCredentials();
                             successHandler(data);
-                        }, 
+                        },
                         errorHandler);
                 }
 
                 factory.changeAccountPassword = function(oldPassword, newPassword, successHandler, errorHandler) {
                     // not using old password because api doesnt, but might be used in the future
                     $http.defaults.headers.common['Authorization'] = ndexConfigs.getEncodedUser();
-                    UserResource.changePassword({}, newPassword, 
+                    UserResource.changePassword({}, newPassword,
                         function(data) {
                             //intercepting here to use auth token provided by user
                             ndexUtility.setUserAuthToken(newPassword);
                             successHandler(data);
-                        }, 
+                        },
                         errorHandler)
                 }
 
@@ -758,13 +758,13 @@
                                 removeReferences(node[key]);
                             }
                         }
-                    }
+                    };
 
                     removeReferences(subnetwork);
 
                     $http.defaults.headers.common['Authorization'] = ndexConfigs.getEncodedUser();
                     return NetworkResource.saveSubnetwork({}, subnetwork, successHandler, errorHandler);
-                }
+                };
 
                 //old http calls below
 

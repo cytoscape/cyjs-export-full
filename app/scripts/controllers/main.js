@@ -12,8 +12,8 @@ angular.module('cyViewerApp')
             var NETWORK_SECTION_ID = '#network';
 
             // Default Visual Style name
-            var DEFAULT_VISUAL_STYLE_NAME = 'Directed';
-            var DEFAULT_LAYOUT_NAME = 'concentric';
+            var DEFAULT_VISUAL_STYLE_NAME = 'NDEx_BEL';
+            var DEFAULT_LAYOUT_NAME = 'preset';
 
             var visualStyleFile;
             var networkData;
@@ -85,7 +85,7 @@ angular.module('cyViewerApp')
                         init(vs);
                         setEventListeners();
                         $scope.currentVS = DEFAULT_VISUAL_STYLE_NAME;
-                        $scope.currentLayout = 'concentric';
+                        $scope.currentLayout = DEFAULT_LAYOUT_NAME;
                         $scope.cy.style().fromJson($scope.visualStyles[DEFAULT_VISUAL_STYLE_NAME].style).update();
                         angular.element('.loading').remove();
                     });
@@ -274,39 +274,6 @@ angular.module('cyViewerApp')
                 $scope.cy.layout(layoutOptions);
             };
 
-            $scope.sendNetworkToNdex = function() {
-                var cyjs = $scope.cy.json();
-                var original = $scope.ndexNetworks[$scope.currentNetwork];
-
-
-                _.each(cyjs.elements.nodes, function(node) {
-                    console.log(node);
-
-                    var originalNode = original.nodes[parseInt(node.data.id)];
-                    var presentations = [];
-                    presentations.push({
-                        name: 'cyjs:x',
-                        type: 'SimplePropertyValuePair',
-                        value: node.position['x']
-                    });
-                    presentations.push({
-                        name: 'cyjs:y',
-                        type: 'SimplePropertyValuePair',
-                        value: node.position['y']
-                    });
-                    originalNode['presentationProperties'] = presentations;
-
-                });
-
-                console.log(original);
-                ndexService.signIn('drh', 'drh');
-                ndexService.saveSubnetwork(original, function() {
-                    console.log('OK');
-                }, function() {
-
-                    console.log('Error');
-                });
-            }
 
 
             // Search network in ndex
@@ -324,9 +291,11 @@ angular.module('cyViewerApp')
 
                 var MAX_EDGE_COUNT = 100000;
                 if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
-                    ndexService.getNetworkByEdges($rootScope.ndexId, 0, MAX_EDGE_COUNT)
+                    ndexService.getNetworkByEdges('f000467c-b3c0-11e4-ae6e-000c29cb28fb', 0, MAX_EDGE_COUNT)
                         .success(function(ndexNetwork) {
                             console.log(ndexNetwork);
+                            $rootScope.originalNetwork = ndexNetwork;
+                            $scope.originalNetwork = ndexNetwork;
                             networkData = networkConverterService.toCytoscapeJs(ndexNetwork);
                             console.log(networkData);
                             angular.element(NETWORK_SECTION_ID).cytoscape(options);
@@ -334,6 +303,7 @@ angular.module('cyViewerApp')
                             $scope.currentNetwork = defaultNetworkName;
 
                             $rootScope.ndexNetwork = networkData;
+                            $rootScope.currentNetworkData = networkData;
                         })
                         .error(function(error) {
                             console.log(error);
@@ -344,6 +314,7 @@ angular.module('cyViewerApp')
                     networkData = $rootScope.ndexNetwork;
                     $scope.currentNetworkData = networkData;
                     $scope.currentNetwork = networkData.data.name;
+                    $rootScope.currentNetworkData = networkData;
                     angular.element(NETWORK_SECTION_ID).cytoscape(options);
                 }
 

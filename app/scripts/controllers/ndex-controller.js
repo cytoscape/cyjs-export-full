@@ -42,13 +42,16 @@ angular.module('cyViewerApp')
   ]);
 
 angular.module('cyViewerApp')
-  .controller('NdexModalInstanceCtrl', ['ndexService', 'ndexHelper', '$rootScope', '$scope', '$modalInstance', '$log',
-    function (ndexService, ndexHelper, $rootScope, $scope, $modalInstance, $log) {
+  .controller('NdexModalInstanceCtrl', ['networkConverterService', 'ndexService', 'ndexHelper', '$rootScope', '$scope', '$modalInstance', '$log',
+    function (networkConverterService, ndexService, ndexHelper, $rootScope, $scope, $modalInstance, $log) {
 
       var MESSAGES = {
         fail: {type: 'danger', msg: 'Login failed: '},
         success: {type: 'success', msg: 'Successfully saved the NDEx network.'}
       };
+
+      $scope.originalNetwork = $rootScope.originalNetwork;
+      $scope.currentNetworkData = $rootScope.currentNetworkData;
 
       $scope.credentials = {
         username: '',
@@ -74,15 +77,28 @@ angular.module('cyViewerApp')
       };
 
       var signIn = function() {
+        $scope.alerts.push({type: 'info', msg: 'Logging in.  Please wait...'});
+
         ndexService.signIn($scope.credentials.username, $scope.credentials.password)
           .success(function (userData) {
             $scope.loggedIn = true;
+            $scope.alerts.push({type: 'info', msg: 'Uploading network.'});
             $log.info(userData);
-            $scope.alerts.push(MESSAGES.success);
             $scope.credentials.password = null;
+
+            networkConverterService.updateNdexNetwork($scope.originalNetwork, $scope.currentNetworkData);
+
+            ndexService.saveSubnetwork($scope.originalNetwork,
+              function(result) {
+                $log.info(result);
+                $log.info('Done!!!!!!!!!!!!!');
+                $scope.alerts.push(MESSAGES.success);
+            }, function(err) {
+              $log.error(err);
+            });
           }).error(function (error) {
             $log.error(error);
-            MESSAGES.fail.msg = error;
+            MESSAGES.fail.msg = 'Failed to login: ' + error;
             $scope.alerts.push(MESSAGES.fail);
           });
       };

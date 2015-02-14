@@ -7,15 +7,13 @@ angular.module('cyViewerApp')
 
             'use strict';
 
-            console.log('Service is ready: ' + networkConverterService.name);
-
             var FILE_LIST_NAME = 'filelist.json';
 
             // Name of network tag in the DOM
             var NETWORK_SECTION_ID = '#embedded';
 
             // Default Visual Style name
-            var DEFAULT_VISUAL_STYLE_NAME = 'Directed';
+            var DEFAULT_VISUAL_STYLE_NAME = 'NDEx_BEL';
 
             var visualStyleFile;
             var networkData;
@@ -26,8 +24,8 @@ angular.module('cyViewerApp')
 
 
             // Application global objects
-            $scope.ndexId = 'aa64bc45-6ae9-11e4-a6dc-000c29202374';
-            $rootScope.ndexId = 'aa64bc45-6ae9-11e4-a6dc-000c29202374';
+            $scope.ndexId = 'f000467c-b3c0-11e4-ae6e-000c29cb28fb';
+            $rootScope.ndexId = 'f000467c-b3c0-11e4-ae6e-000c29cb28fb';
             $scope.networks = {};
             $scope.ndexNetworks = {};
 
@@ -71,12 +69,13 @@ angular.module('cyViewerApp')
                 maxZoom: 200,
 
                 layout: {
-                    name: 'concentric'
+                    name: 'preset'
                 },
 
                 ready: function() {
                     $scope.cy = this;
                     $scope.cy.load(networkData.elements);
+                    //console.log(JSON.stringify($scope.cy.json()));
 
                     VisualStyles.query({
                         filename: visualStyleFile
@@ -84,7 +83,7 @@ angular.module('cyViewerApp')
                         init(vs);
                         setEventListeners();
                         $scope.currentVS = DEFAULT_VISUAL_STYLE_NAME;
-                        $scope.currentLayout = 'concentric';
+                        $scope.currentLayout = 'preset';
                         $scope.cy.style().fromJson($scope.visualStyles[DEFAULT_VISUAL_STYLE_NAME].style).update();
                         angular.element('.loading').remove();
                     });
@@ -256,40 +255,6 @@ angular.module('cyViewerApp')
                 $scope.cy.layout(layoutOptions);
             };
 
-            $scope.sendNetworkToNdex = function() {
-                var cyjs = $scope.cy.json();
-                var original = $scope.ndexNetworks[$scope.currentNetwork];
-
-
-                _.each(cyjs.elements.nodes, function(node) {
-                    console.log(node);
-
-                    var originalNode = original.nodes[parseInt(node.data.id)];
-                    var presentations = [];
-                    presentations.push({
-                        name: 'cyjs:x',
-                        type: 'SimplePropertyValuePair',
-                        value: node.position['x']
-                    });
-                    presentations.push({
-                        name: 'cyjs:y',
-                        type: 'SimplePropertyValuePair',
-                        value: node.position['y']
-                    });
-                    originalNode['presentationProperties'] = presentations;
-
-                });
-
-                console.log(original);
-                ndexService.signIn('drh', 'drh');
-                ndexService.saveSubnetwork(original, function() {
-                    console.log('OK');
-                }, function() {
-
-                    console.log('Error');
-                });
-            }
-
 
             // Search network in ndex
             $scope.$on('switchNetwork', function(event, data) {
@@ -319,11 +284,11 @@ angular.module('cyViewerApp')
 
                 var MAX_EDGE_COUNT = 100000;
                 if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
-                    ndexService.getNetworkByEdges($scope.ndexId, 0, MAX_EDGE_COUNT)
+                    ndexService.getNetworkByEdges('f000467c-b3c0-11e4-ae6e-000c29cb28fb', 0, MAX_EDGE_COUNT)
                         .success(function(ndexNetwork) {
                             console.log(ndexNetwork);
+                            $rootScope.originalNetwork = ndexNetwork;
                             networkData = networkConverterService.toCytoscapeJs(ndexNetwork);
-                            console.log(networkData);
                             angular.element(NETWORK_SECTION_ID).cytoscape(options);
                             $scope.currentNetworkData = networkData;
                             $scope.currentNetwork = defaultNetworkName;
