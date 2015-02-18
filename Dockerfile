@@ -22,7 +22,9 @@ RUN git checkout feature/polymer && git pull
 
 RUN npm install
 RUN bower install --allow-root --config.interactive=false --force
-RUN grunt --force
+RUN grunt --force build
+
+COPY dist /usr/share/nginx/html
 
 EXPOSE 80
 

@@ -292,8 +292,8 @@ angular.module('cyViewerApp')
                             angular.element(NETWORK_SECTION_ID).cytoscape(options);
                             $scope.currentNetworkData = networkData;
                             $scope.currentNetwork = defaultNetworkName;
-
                             $rootScope.ndexNetwork = networkData;
+                            console.log(networkData);
                         })
                         .error(function(error) {
                             console.log(error);
