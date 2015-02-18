@@ -24,7 +24,8 @@ RUN npm install
 RUN bower install --allow-root --config.interactive=false --force
 RUN grunt --force build
 
-COPY dist /usr/share/nginx/html
+WORKDIR /data
+COPY app /usr/share/nginx/html
 
 EXPOSE 80
 

@@ -83,11 +83,42 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 		var data = {
 			id: index.toString(),
 			name: label,
-      functionType: getFunctionType(ndexNode, ndexNetwork)
+      functionType: getFunctionType(ndexNode, ndexNetwork),
+      terms: getTerm(ndexNode, ndexNetwork)
 		};
 
 		return data;
 	};
+
+  var getTerm = function(ndexNode, ndexNetwork) {
+    var represents = ndexNode.represents;
+    var functionTerm = ndexNetwork.functionTerms[represents];
+    var parameterIds = functionTerm.parameterIds;
+
+
+    return getParams(parameterIds, ndexNetwork, []);
+
+  };
+
+  var getParams = function(paramList, ndexNetwork, results) {
+    _.each(paramList, function(id) {
+      var param = ndexNetwork.baseTerms[id];
+      if(param === undefined) {
+        param = ndexNetwork.functionTerms[id];
+        return getParams(param.parameterIds, ndexNetwork, results);
+      }
+
+      if(param !== undefined) {
+        var nameSpace = ndexNetwork.namespaces[param.namespaceId];
+        results.push({
+          namespace: nameSpace.prefix,
+          name: param.name
+        });
+      }
+    });
+    return results;
+
+  }
 
   var getNodePosition = function(presentationProperties) {
     var position = {};

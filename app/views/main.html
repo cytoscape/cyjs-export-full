@@ -19,9 +19,19 @@
 </div>
 
 <div class="details" ng-show="detailsState.show" ng-dblclick="toggleDetails()">
-  <h2>Name: <a href="http://www.cytoscape.org/" target="_new">{{name}}</a></h2>
+  <h4>{{ detailsTitle }}</h4>
 
-  <h2>{{id}}</h2>
+  <h4>{{name}}</h4>
+
+  <h4>{{linkTitle}}</h4>
+  <ul data-ng-repeat="term in termList">
+    <li>{{ term.namespace }}:<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene={{ term.name }}" target="_blank">{{ term.name }}</a></li>
+  </ul>
+
+  <h4>
+    {{ citationTitle }}
+    <a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ citationLink }}" target="_blank">{{ citationLink }}</a>
+  </h4>
 </div>
 
 <div ng-show="browserState.show" class="table-browser">

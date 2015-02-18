@@ -170,6 +170,11 @@ angular.module('cyViewerApp')
                     var node = event.cyTarget;
                     console.log(node.data());
                     $scope.name = node.data().name;
+                    $scope.detailsTitle = 'Name:';
+                    $scope.citationTitle = null;
+                    $scope.linkTitle = 'External Links:';
+                    $scope.termList = node.data().terms;
+                    $scope.citationLink = null;
                     $scope.detailsState.show = true;
                     $scope.$apply();
                 });
@@ -178,6 +183,16 @@ angular.module('cyViewerApp')
                     var edge = event.cyTarget;
                     console.log(edge.data());
                     $scope.name = edge.data().interaction;
+                    $scope.detailsTitle = 'Support:';
+                    $scope.linkTitle = null;
+                    $scope.termList = null;
+
+
+                    var firstCitationId = edge.data().citations[0].identifier;
+                    if(firstCitationId.lastIndexOf('pmid', 0) === 0) {
+                      $scope.citationTitle = 'PubMed ID: ';
+                      $scope.citationLink = firstCitationId.substr(5, firstCitationId.length-1);
+                    }
                     $scope.detailsState.show = true;
                     $scope.$apply();
 
