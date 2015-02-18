@@ -749,6 +749,7 @@
                 }
 
                 factory.saveSubnetwork = function (subnetwork, successHandler, errorHandler) {
+
                     var removeReferences = function (node) {
                         for (var key in node) {
                             if (key == 'network') {

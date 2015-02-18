@@ -82,7 +82,8 @@ angular.module('cyViewerApp')
         ndexService.signIn($scope.credentials.username, $scope.credentials.password)
           .success(function (userData) {
             $scope.loggedIn = true;
-            $scope.alerts.push({type: 'info', msg: 'Uploading network.'});
+            $scope.alerts.push({type: 'info', msg: 'Uploading network...'});
+
             $log.info(userData);
             $scope.credentials.password = null;
 
@@ -93,6 +94,7 @@ angular.module('cyViewerApp')
                 $log.info(result);
                 $log.info('Done!!!!!!!!!!!!!');
                 $scope.alerts.push(MESSAGES.success);
+
             }, function(err) {
               $log.error(err);
             });
