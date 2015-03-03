@@ -797,7 +797,7 @@
       "width" : 2.0,
       "source-arrow-color" : "rgb(0,0,0)",
       "target-arrow-color" : "rgb(0,0,0)",
-      "opacity" : 0.7058823529411765,
+      "opacity" : 0.43,
       "line-style" : "solid",
       "target-arrow-shape" : "triangle",
       "font-size" : 8,
@@ -853,16 +853,6 @@
     "selector" : "edge[predicateId = 'DECREASES']",
     "css" : {
       "target-arrow-color" : "rgb(65,182,196)"
-    }
-  }, {
-    "selector" : "edge[predicateId = 'DIRECTLY_INCREASES']",
-    "css" : {
-      "opacity" : 0.8627450980392157
-    }
-  }, {
-    "selector" : "edge[predicateId = 'DIRECTLY_DECREASES']",
-    "css" : {
-      "opacity" : 0.8627450980392157
     }
   }, {
     "selector" : "edge[predicateId = 'INCREASES']",
