@@ -25,7 +25,10 @@ angular.module('cyViewerApp')
 
             // Application global objects
             // $scope.ndexId = 'f000467c-b3c0-11e4-ae6e-000c29cb28fb';
-            $rootScope.ndexId = '4c5fa2e6-c139-11e4-ae6e-000c29cb28fb';
+            //$rootScope.ndexId = '4c5fa2e6-c139-11e4-ae6e-000c29cb28fb';
+            $rootScope.ndexId = '1bfc5903-c1c8-11e4-bf59-000c29873918';
+            //$rootScope.ndexId = 'a8768301-c179-11e4-bf59-000c29873918';
+
             $scope.networks = {};
             $scope.ndexNetworks = {};
 

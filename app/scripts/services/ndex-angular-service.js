@@ -41,7 +41,7 @@
                 // define and initialize factory object
                 var factory = {};
 
-                var ndexServerURI = "http://www.ndexbio.org/rest";
+                var ndexServerURI = "http://test.ndexbio.org/rest";
                 // This convention is useful, but we may later allow a
                 // site configuration to explicitly specify a different host
                 //if (location.hostname.toLowerCase() != "localhost")
@@ -1109,7 +1109,7 @@
     ndexServiceApp.factory('ndexConfigs', function (ndexUtility) {
         var factory = {};
 
-        var ndexServerURI = "http://www.ndexbio.org/rest";
+        var ndexServerURI = "http://test.ndexbio.org/rest";
         // This convention is useful, but we may later allow a
         // site configuration to explicitly specify a different host
         //if (location.hostname.toLowerCase() != "localhost")
@@ -1292,7 +1292,7 @@
                 if (term.namespaceId) {
                     var namespace = network.namespaces[term.namespaceId];
 
-                    if (!namespace || namespace.prefix === "LOCAL")
+                    if (!namespace || !namespace.prefix || namespace.prefix === "LOCAL" || namespace.prefix.toLowerCase() === "bel")
                         return term.name;
                     else if (!namespace.prefix)
                         return namespace.uri + term.name;
@@ -1371,6 +1371,8 @@
                     return "path";
                 case "peptidase_activity":
                     return "pep";
+                case "gtp_bound_activity":
+                    return "gtp";
                 case "protein_abundance":
                     return "p";
                 case "rna_abundance":

@@ -80,6 +80,8 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 
 	var getNodeData = function(index, ndexNode, ndexNetwork) {
 		var label = ndexHelper.getNodeLabel(ndexNode, ndexNetwork);
+    label = belAbbreviate(label);
+    console.log("node label = " + label);
 		var data = {
 			id: index.toString(),
 			name: label,
@@ -90,14 +92,36 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 		return data;
 	};
 
+  var belAbbreviate = function(input){
+    label = input;
+    label = label.replace(/bel:/ig, "");
+    label = label.replace(/PROTEIN_ABUNDANCE\(/ig, "p(");
+    label = label.replace(/RNA_ABUNDANCE\(/ig, "r(");
+    label = label.replace(/COMPLEX_ABUNDANCE\(/ig, "complex(");
+    label = label.replace(/ABUNDANCE\(/ig, "a(");
+    label = label.replace(/KINASE_ACTIVITY\(/ig, "kin(");
+    label = label.replace(/CATALYTIC_ACTIVITY\(/ig, "cat(");
+    label = label.replace(/GTP_BOUND_ACTIVITY\(/ig, "gtp(");
+    label = label.replace(/PEPTIDASE_ACTIVITY\(/ig, "pep(");
+    label = label.replace(/BIOLOGICAL_PROCESS\(/ig, "bp(");
+    label = label.replace(/MOLECULAR_ACTIVITY\(/ig, "act(");
+    label = label.replace(/TRANSCRIPTIONAL_ACTIVITY\(/ig, "trans(");
+    label = label.replace(/PROTEIN_MODIFICATION\(/ig, "pmod(");
+    label = label.replace(/SUBSTITUTION\(/ig, "sub(");
+    label = label.replace(/DEGRADATION\(/ig, "deg(");
+    label = label.replace(/PATHOLOGY\(/ig, "path(");
+
+    return label;
+  };
+
   var getTerm = function(ndexNode, ndexNetwork) {
     var represents = ndexNode.represents;
     var functionTerm = ndexNetwork.functionTerms[represents];
+    if (functionTerm === undefined){
+      return []
+    }
     var parameterIds = functionTerm.parameterIds;
-
-
     return getParams(parameterIds, ndexNetwork, []);
-
   };
 
   var getParams = function(paramList, ndexNetwork, results) {
@@ -136,13 +160,30 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 
   // This is BEL specific.
   var getFunctionType = function(node, ndexNetwork) {
-
     var represents = node.represents;
-    var functionTerm = ndexNetwork.functionTerms[represents];
-    var baseTerm = ndexNetwork.baseTerms[functionTerm.functionTermId];
-
-    return baseTerm.name;
-
+    if (represents !== undefined){
+      var functionTerm = ndexNetwork.functionTerms[represents];
+      if (functionTerm !== undefined){
+      // Case 1 - BEL - node represents a function term
+        var functionBaseTerm = ndexNetwork.baseTerms[functionTerm.functionTermId];
+        return functionBaseTerm.name;
+      }
+      var baseTerm = ndexNetwork.baseTerms[represents];
+      if (baseTerm !== undefined){
+        // Case 1 - BEL - node represents a base term that has a BEL expression as its name
+        var name = baseTerm.name.toLowerCase();
+        console.log("node represents bt: " + name);
+          // so get substring between the first period and the first left paren
+        var parenIndex = name.indexOf("(");
+        if (parenIndex > 0){
+            // found the left paren
+            functionString = name.substring(0, parenIndex);
+            console.log("functionString = " + functionString);
+            return functionString.toUpperCase();
+        }
+      }
+    }
+    return "unknown"
   };
 
   var getFunctionTermName = function(functionTerm) {
@@ -183,7 +224,11 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 			data.supports.push(supportObj);
 		}
 
-		data.interaction = data.supports[0].text;
+		if (data.supports.length > 0){
+      data.interaction = data.supports[0].text;
+    } else {
+      data.interaction = "no support";
+    }
 
 		return data;
 	};
