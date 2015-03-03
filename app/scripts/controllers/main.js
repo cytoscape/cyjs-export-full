@@ -70,6 +70,7 @@ angular.module('cyViewerApp')
                 showOverlay: false,
                 minZoom: 0.01,
                 maxZoom: 200,
+                motionBlur: false,
 
                 layout: {
                     name: DEFAULT_LAYOUT_NAME
@@ -306,7 +307,7 @@ angular.module('cyViewerApp')
 
                 var MAX_EDGE_COUNT = 100000;
                 if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
-                    ndexService.getNetworkByEdges('f000467c-b3c0-11e4-ae6e-000c29cb28fb', 0, MAX_EDGE_COUNT)
+                    ndexService.getNetworkByEdges('4c5fa2e6-c139-11e4-ae6e-000c29cb28fb', 0, MAX_EDGE_COUNT)
                         .success(function(ndexNetwork) {
                             console.log(ndexNetwork);
                             $rootScope.originalNetwork = ndexNetwork;

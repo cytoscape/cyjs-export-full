@@ -2,7 +2,7 @@ FROM nginx
 
 MAINTAINER Keiichiro Ono <kono@ucsd.edu>
 
-RUN apt-get update && apt-get install -y git curl ruby ruby-dev make bzip2 g++
+RUN apt-get update && apt-get install -y g++ git curl ruby ruby-dev make bzip2
 RUN curl -sL https://deb.nodesource.com/setup | bash -
 RUN apt-get install -y nodejs
 
@@ -25,7 +25,7 @@ RUN bower install --allow-root --config.interactive=false --force
 RUN grunt --force build
 
 WORKDIR /data
-COPY app /usr/share/nginx/html
+ADD app /usr/share/nginx/html
 
 EXPOSE 80
 
