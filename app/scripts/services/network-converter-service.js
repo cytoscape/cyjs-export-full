@@ -166,6 +166,7 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
       if (functionTerm !== undefined){
       // Case 1 - BEL - node represents a function term
         var functionBaseTerm = ndexNetwork.baseTerms[functionTerm.functionTermId];
+        console.log("functionString = " + functionBaseTerm.name);
         return functionBaseTerm.name;
       }
       var baseTerm = ndexNetwork.baseTerms[represents];
@@ -236,6 +237,7 @@ viewerApp.service('networkConverterService', ['ndexHelper', function(ndexHelper)
 	var findTerm = function(termId, ndexNetwork) {
 		var idString = termId.toString();
 		var term = ndexNetwork.baseTerms[idString];
+    console.log("findTerm = " + ndexHelper.getTermLabel(term, ndexNetwork));
 		return ndexHelper.getTermLabel(term, ndexNetwork);
 	};
 

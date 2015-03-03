@@ -798,99 +798,99 @@
       "source-arrow-color" : "rgb(0,0,0)",
       "target-arrow-color" : "rgb(0,0,0)",
       "opacity" : 0.7058823529411765,
-      "line-style" : "dashed",
+      "line-style" : "solid",
       "target-arrow-shape" : "triangle",
       "font-size" : 8,
       "text-opacity" : 1.0,
       "source-arrow-shape" : "none"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_INCREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_INCREASES']",
     "css" : {
       "line-color" : "rgb(0,102,204)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_DECREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_DECREASES']",
     "css" : {
       "line-color" : "rgb(65,182,196)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:INCREASES']",
+    "selector" : "edge[predicateId = 'INCREASES']",
     "css" : {
       "line-color" : "rgb(0,102,204)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DECREASES']",
+    "selector" : "edge[predicateId = 'DECREASES']",
     "css" : {
       "line-color" : "rgb(65,182,196)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_INCREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_INCREASES']",
     "css" : {
       "width" : 5.0
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_DECREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_DECREASES']",
     "css" : {
       "width" : 5.0
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_INCREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_INCREASES']",
     "css" : {
       "target-arrow-color" : "rgb(0,102,204)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_DECREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_DECREASES']",
     "css" : {
       "target-arrow-color" : "rgb(65,182,196)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:INCREASES']",
+    "selector" : "edge[predicateId = 'INCREASES']",
     "css" : {
       "target-arrow-color" : "rgb(0,102,204)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DECREASES']",
+    "selector" : "edge[predicateId = 'DECREASES']",
     "css" : {
       "target-arrow-color" : "rgb(65,182,196)"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_INCREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_INCREASES']",
     "css" : {
       "opacity" : 0.8627450980392157
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_DECREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_DECREASES']",
     "css" : {
       "opacity" : 0.8627450980392157
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:INCREASES']",
+    "selector" : "edge[predicateId = 'INCREASES']",
     "css" : {
       "line-style" : "dashed"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DECREASES']",
+    "selector" : "edge[predicateId = 'DECREASES']",
     "css" : {
       "line-style" : "dashed"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_INCREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_INCREASES']",
     "css" : {
       "target-arrow-shape" : "triangle"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DIRECTLY_DECREASES']",
+    "selector" : "edge[predicateId = 'DIRECTLY_DECREASES']",
     "css" : {
       "target-arrow-shape" : "tee"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:INCREASES']",
+    "selector" : "edge[predicateId = 'INCREASES']",
     "css" : {
       "target-arrow-shape" : "triangle"
     }
   }, {
-    "selector" : "edge[predicateId = 'BEL:DECREASES']",
+    "selector" : "edge[predicateId = 'DECREASES']",
     "css" : {
       "target-arrow-shape" : "tee"
     }
