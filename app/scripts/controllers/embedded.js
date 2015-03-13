@@ -27,8 +27,12 @@ angular.module('cyViewerApp')
             // $scope.ndexId = 'f000467c-b3c0-11e4-ae6e-000c29cb28fb';
             //$rootScope.ndexId = '4c5fa2e6-c139-11e4-ae6e-000c29cb28fb';
             //$rootScope.ndexId = 'f73429ac-c1f0-11e4-bf59-000c29873918';
-            //$rootScope.ndexId = 'a8768301-c179-11e4-bf59-000c29873918';
-            $rootScope.ndexId = 'ee603897-c1fc-11e4-bf59-000c29873918';
+            // this is the nice MEK-ERK network
+            $rootScope.ndexId = '2622c404-c439-11e4-9733-000c29873918';
+
+          // this is the one used in the paper
+            //$rootScope.ndexId = '76887176-c221-11e4-bf59-000c29873918';
+
             $scope.networks = {};
             $scope.ndexNetworks = {};
 
