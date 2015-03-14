@@ -405,7 +405,7 @@ viewerApp.service('networkConverterService', ['ndexHelper', function (ndexHelper
   var findTerm = function (termId, ndexNetwork) {
     var idString = termId.toString();
     var term = ndexNetwork.baseTerms[idString];
-    console.log("findTerm = " + ndexHelper.getTermLabel(term, ndexNetwork));
+    // console.log("findTerm = " + ndexHelper.getTermLabel(term, ndexNetwork));
     return ndexHelper.getTermLabel(term, ndexNetwork);
   };
 

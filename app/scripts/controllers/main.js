@@ -1,8 +1,8 @@
 /*global _, angular */
 
 angular.module('cyViewerApp')
-    .controller('MainCtrl', ['$rootScope', '$scope', '$http', '$location', '$routeParams', '$window', 'Network', 'VisualStyles', 'ndexService',
-        function($rootScope, $scope, $http, $location, $routeParams, $window, Network, VisualStyles, ndexService) {
+    .controller('MainCtrl', ['$rootScope', '$scope', '$http', '$location', '$routeParams', '$window', 'Network', 'VisualStyles', 'ndexService', 'networkConverterService',
+        function($rootScope, $scope, $http, $location, $routeParams, $window, Network, VisualStyles, ndexService, networkConverterService) {
 
             'use strict';
 
@@ -18,10 +18,33 @@ angular.module('cyViewerApp')
             var visualStyleFile;
             var networkData;
 
+            var defaultLayout = 'preset';
+
             $scope.LAYOUTS = [
                 'preset', 'random', 'grid', 'circle', 'concentric', 'breadthfirst', 'cose'
             ];
 
+            var LINKOUT_URLS = {
+                'HGNC': 'http://www.genecards.org/cgi-bin/carddisp.pl?gene=$id',
+                'RGD': 'http://rgd.mcw.edu/rgdweb/search/genes.html?term=$id&chr=ALL&start=&stop=&map=70&speciesType=3&obj=gene',
+                'MGI': 'http://www.informatics.jax.org/searchtool/Search.do?query=$id&submit=Quick%0D%0ASearch',
+                'CHEBI': 'http://www.ebi.ac.uk/ebisearch/search.ebi?db=chebi&t=$id',
+                'GO': 'http://www.ebi.ac.uk/QuickGO/GSearch?q=$id',
+                'MESHD': 'http://www.ncbi.nlm.nih.gov/mesh/?term=$id'
+            };
+
+
+            var DEF_NDEX_NETWORK_ID = '2622c404-c439-11e4-9733-000c29873918';
+
+            var ndexNetworkId;
+            if($routeParams.ndexId === undefined) {
+                ndexNetworkId = DEF_NDEX_NETWORK_ID;
+            } else {
+                ndexNetworkId = $routeParams.ndexId;
+                if(ndexNetworkId !== DEF_NDEX_NETWORK_ID) {
+                    defaultLayout = 'concentric';
+                }
+            }
 
             // Application global objects
             $scope.networks = {};
@@ -73,7 +96,7 @@ angular.module('cyViewerApp')
                 motionBlur: false,
 
                 layout: {
-                    name: DEFAULT_LAYOUT_NAME
+                    name: defaultLayout
                 },
 
                 ready: function() {
@@ -169,12 +192,37 @@ angular.module('cyViewerApp')
                 // For popup
                 $scope.cy.on('click', 'node', function(event) {
                     var node = event.cyTarget;
-                    console.log(node.data());
                     $scope.name = node.data().name;
                     $scope.detailsTitle = 'Name:';
                     $scope.citationTitle = null;
                     $scope.linkTitle = 'External Links:';
-                    $scope.termList = node.data().terms;
+                    var terms = node.data().terms;
+                    var newTerms = [];
+                    
+                    console.log(node.data());
+                    _.each(node.data().terms, function(term) {
+                        if (term.namespace !== 'BEL') {
+                            console.log(term);
+                            var linkout = LINKOUT_URLS[term.namespace];
+                            if (linkout !== undefined) {
+                                linkout = linkout.replace('$id', term.name);
+                            } else {
+                                linkout = '';
+                            }
+
+                            console.log(linkout)
+
+                            var newTerm = {
+                                name: term.name,
+                                namespace: term.namespace,
+                                link: linkout
+                            };
+
+                            newTerms.push(newTerm);
+                        }
+
+                    })
+                    $scope.termList = newTerms;
                     $scope.citationLink = null;
                     $scope.detailsState.show = true;
                     $scope.$apply();
@@ -190,9 +238,9 @@ angular.module('cyViewerApp')
 
 
                     var firstCitationId = edge.data().citations[0].identifier;
-                    if(firstCitationId.lastIndexOf('pmid', 0) === 0) {
-                      $scope.citationTitle = 'PubMed ID: ';
-                      $scope.citationLink = firstCitationId.substr(5, firstCitationId.length-1);
+                    if (firstCitationId.lastIndexOf('pmid', 0) === 0) {
+                        $scope.citationTitle = 'PubMed ID: ';
+                        $scope.citationLink = firstCitationId.substr(5, firstCitationId.length - 1);
                     }
                     $scope.detailsState.show = true;
                     $scope.$apply();
@@ -306,8 +354,8 @@ angular.module('cyViewerApp')
                 visualStyleFile = fileList.style;
 
                 var MAX_EDGE_COUNT = 100000;
-                if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
-                    ndexService.getNetworkByEdges('4c5fa2e6-c139-11e4-ae6e-000c29cb28fb', 0, MAX_EDGE_COUNT)
+                // if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
+                    ndexService.getNetworkByEdges(ndexNetworkId, 0, MAX_EDGE_COUNT)
                         .success(function(ndexNetwork) {
                             console.log(ndexNetwork);
                             $rootScope.originalNetwork = ndexNetwork;
@@ -316,7 +364,7 @@ angular.module('cyViewerApp')
                             console.log(networkData);
                             angular.element(NETWORK_SECTION_ID).cytoscape(options);
                             $scope.currentNetworkData = networkData;
-                            $scope.currentNetwork = defaultNetworkName;
+                            $scope.currentNetwork = networkData.data.name;
 
                             $rootScope.ndexNetwork = networkData;
                             $rootScope.currentNetworkData = networkData;
@@ -325,14 +373,14 @@ angular.module('cyViewerApp')
                             console.log(error);
                         });
 
-                } else {
-                    console.log('Network exists: ' + $rootScope.ndexNetwork.data['name']);
-                    networkData = $rootScope.ndexNetwork;
-                    $scope.currentNetworkData = networkData;
-                    $scope.currentNetwork = networkData.data.name;
-                    $rootScope.currentNetworkData = networkData;
-                    angular.element(NETWORK_SECTION_ID).cytoscape(options);
-                }
+                // } else {
+                //     console.log('Network exists: ' + $rootScope.ndexNetwork.data['name']);
+                //     networkData = $rootScope.ndexNetwork;
+                //     $scope.currentNetworkData = networkData;
+                //     $scope.currentNetwork = networkData.data.name;
+                //     $rootScope.currentNetworkData = networkData;
+                //     angular.element(NETWORK_SECTION_ID).cytoscape(options);
+                // }
 
             });
         }

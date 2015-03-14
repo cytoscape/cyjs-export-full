@@ -18,6 +18,8 @@ angular.module('cyViewerApp')
             var visualStyleFile;
             var networkData;
 
+            var defaultLayout = 'preset';
+
             $scope.LAYOUTS = [
                 'preset', 'random', 'grid', 'circle', 'concentric', 'breadthfirst', 'cose'
             ];
@@ -28,9 +30,19 @@ angular.module('cyViewerApp')
             //$rootScope.ndexId = '4c5fa2e6-c139-11e4-ae6e-000c29cb28fb';
             //$rootScope.ndexId = 'f73429ac-c1f0-11e4-bf59-000c29873918';
             // this is the nice MEK-ERK network
-            $rootScope.ndexId = '2622c404-c439-11e4-9733-000c29873918';
+            var DEF_NDEX_NETWORK_ID = '2622c404-c439-11e4-9733-000c29873918';
 
-          // this is the one used in the paper
+            $scope.ndexId;
+            if($routeParams.ndexId === undefined) {
+                $scope.ndexId = DEF_NDEX_NETWORK_ID;
+            } else {
+                $scope.ndexId = $routeParams.ndexId;
+                defaultLayout = 'concentric';
+            }
+
+            console.log($scope.ndexId);
+
+            // this is the one used in the paper
             //$rootScope.ndexId = '76887176-c221-11e4-bf59-000c29873918';
 
             $scope.networks = {};
@@ -76,7 +88,7 @@ angular.module('cyViewerApp')
                 maxZoom: 200,
 
                 layout: {
-                    name: 'preset'
+                    name: defaultLayout
                 },
 
                 ready: function() {
@@ -291,7 +303,7 @@ angular.module('cyViewerApp')
 
                 var MAX_EDGE_COUNT = 100000;
                 if ($rootScope.ndexNetwork === undefined || $rootScope.ndexNetwork === null) {
-                    ndexService.getNetworkByEdges($rootScope.ndexId, 0, MAX_EDGE_COUNT)
+                    ndexService.getNetworkByEdges($scope.ndexId, 0, MAX_EDGE_COUNT)
                         .success(function(ndexNetwork) {
                             console.log(ndexNetwork);
                             $rootScope.originalNetwork = ndexNetwork;

@@ -25,7 +25,15 @@ angular.module('cyViewerApp', [
                 templateUrl: 'views/paper.html',
                 controller: 'EmbeddedCtr'
             })
+            .when('/pub/:ndexId', {
+                templateUrl: 'views/paper.html',
+                controller: 'EmbeddedCtr'
+            })
             .when('/full', {
+                templateUrl: 'views/main.html',
+                controller: 'MainCtrl'
+            })
+            .when('/full/:ndexId', {
                 templateUrl: 'views/main.html',
                 controller: 'MainCtrl'
             })

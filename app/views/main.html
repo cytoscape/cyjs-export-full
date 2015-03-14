@@ -25,7 +25,12 @@
 
   <h4>{{linkTitle}}</h4>
   <ul data-ng-repeat="term in termList">
-    <li>{{ term.namespace }}:<a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene={{ term.name }}" target="_blank">{{ term.name }}</a></li>
+    <div ng-if="term.link != ''">
+      <li>{{ term.namespace }}: <a href="{{ term.link }}" target="_blank">{{ term.name }}</a></li>
+    </div>
+    <div ng-if="term.link == ''">
+      <li>{{ term.namespace }}: {{ term.name }}</li>
+    </div>
   </ul>
 
   <h4>
