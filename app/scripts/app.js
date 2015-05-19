@@ -5,39 +5,41 @@
 'use strict';
 
 angular.module('cyViewerApp', [
-    'ngCookies',
-    'ngResource',
-    'ngSanitize',
-    'ngRoute',
-    'ngAnimate',
-    'ui.bootstrap',
-    'angular-underscore',
-    'colorpicker.module',
-    'angularSpinner',
-    
-    // For NDEx access
-    'ndexServiceApp'
+  'ngCookies',
+  'ngResource',
+  'ngSanitize',
+  'ngRoute',
+  'ngAnimate',
+  'ui.bootstrap',
+  'angular-underscore',
+  'colorpicker.module',
+  'angularSpinner',
+
+  // For NDEx access
+  'ndexServiceApp'
 ])
-    .config(function($routeProvider) {
-        // Routing
-        $routeProvider
-            .when('/', {
-                templateUrl: 'views/paper.html',
-                controller: 'EmbeddedCtr'
-            })
-            .when('/pub/:ndexId', {
-                templateUrl: 'views/paper.html',
-                controller: 'EmbeddedCtr'
-            })
-            .when('/full', {
-                templateUrl: 'views/main.html',
-                controller: 'MainCtrl'
-            })
-            .when('/full/:ndexId', {
-                templateUrl: 'views/main.html',
-                controller: 'MainCtrl'
-            })
-            .otherwise({
-                 redirectTo: '/'
-            });
-    });
+  .config(function ($routeProvider) {
+    // Routing
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/paper.html',
+        controller: 'EmbeddedCtr'
+      })
+      .when('/pub/:ndexId', {
+        templateUrl: 'views/paper.html',
+        controller: 'EmbeddedCtr'
+      })
+      .when('/full', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
+      })
+      .when('/full/:ndexId', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+  })
+
+;

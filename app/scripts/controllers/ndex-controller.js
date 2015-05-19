@@ -4,6 +4,7 @@
 angular.module('cyViewerApp')
   .controller('NdexModalCtrl', ['ndexService', '$scope', '$modal', '$log',
     function (ndexService, $scope, $modal, $log) {
+      'use strict';
 
       $scope.open = function (size) {
 
@@ -42,9 +43,9 @@ angular.module('cyViewerApp')
   ]);
 
 angular.module('cyViewerApp')
-  .controller('NdexModalInstanceCtrl', ['networkConverterService', 'ndexService', 'ndexHelper', '$rootScope', '$scope', '$modalInstance', '$log',
-    function (networkConverterService, ndexService, ndexHelper, $rootScope, $scope, $modalInstance, $log) {
-
+  .controller('NdexModalInstanceCtrl', ['networkConverterService', 'ndexService', 'ndexHelper', 'ndexUtility', '$rootScope', '$scope', '$modalInstance', '$http', '$log',
+    function (networkConverterService, ndexService, ndexHelper, ndexUtility, $rootScope, $scope, $modalInstance, $http, $log) {
+      'use strict';
       var MESSAGES = {
         fail: {type: 'danger', msg: 'Login failed: '},
         success: {type: 'success', msg: 'Successfully saved the NDEx network.'}
@@ -61,7 +62,7 @@ angular.module('cyViewerApp')
       $scope.alerts = [];
 
 
-      $scope.closeAlert = function() {
+      $scope.closeAlert = function () {
         $scope.alerts = [];
       };
 
@@ -69,38 +70,50 @@ angular.module('cyViewerApp')
         $scope.closeAlert();
 
         $scope.uuid = false;
-        signIn();
+        $scope.signIn();
 
         $scope.networkSearchResults = [];
 
         //$modalInstance.close($scope.selected.item);
       };
 
-      var signIn = function() {
+     $scope.signIn = function () {
         $scope.alerts.push({type: 'info', msg: 'Logging in.  Please wait...'});
 
-        ndexService.signIn($scope.credentials.username, $scope.credentials.password)
-          .success(function (userData) {
+        ndexUtility.clearUserCredentials();
+        var url = ndexService.getNdexServerUri() + '/user/authenticate/' + $scope.credentials.username + '/' + $scope.credentials.password;
+       console.log('url = ' + url);
+        var config ={};
+        //{
+        //  headers: {
+        //    'Authorization': 'Basic ' + btoa($scope.credentials.username + ':' + $scope.credentials.password)
+        //  }
+        //};
+        // , status, headers, config, statusText
+        $http.get(url, config).
+          success(function (data) {
+            ndexUtility.setUserCredentials(data.accountName, data.externalId, $scope.credentials.password);
             $scope.loggedIn = true;
             $scope.alerts.push({type: 'info', msg: 'Uploading network...'});
 
-            $log.info(userData);
+            $log.info(config);
             $scope.credentials.password = null;
 
             networkConverterService.updateNdexNetwork($scope.originalNetwork, $scope.currentNetworkData);
 
             ndexService.saveSubnetwork($scope.originalNetwork,
-              function(result) {
+              function (result) {
                 $log.info(result);
                 $log.info('Done!!!!!!!!!!!!!');
                 $scope.alerts.push(MESSAGES.success);
-
-            }, function(err) {
-              $log.error(err);
-            });
-          }).error(function (error) {
-            $log.error(error);
-            MESSAGES.fail.msg = 'Failed to login: ' + error;
+              }
+            );
+          }
+        ).
+          error(function (data) {
+            // , status, headers, config, statusText
+            $log.error(data);
+            MESSAGES.fail.msg = 'Failed to login: ';
             $scope.alerts.push(MESSAGES.fail);
           });
       };

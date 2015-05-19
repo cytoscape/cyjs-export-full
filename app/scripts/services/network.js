@@ -8,8 +8,8 @@
  * Services that persists and retrieves TODOs from localStorage
  */
 angular.module('cyViewerApp')
-    .factory('Network', 
-    	['$resource', function ($resource) {
-        	return $resource('data/:filename', {filename: '@filename'});
-    }]
+  .factory('Network',
+  ['$resource', function ($resource) {
+    return $resource('data/:filename', {filename: '@filename'});
+  }]
 );
