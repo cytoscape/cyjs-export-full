@@ -89,15 +89,18 @@ viewerApp.service('networkConverterService', ['ndexHelper', function (ndexHelper
     } else {
       label = ndexHelper.getNodeLabel(ndexNode, ndexNetwork);
     }
-    console.log('original Label = ' + label);
+/*    console.log('original Label = ' + label);
     var hackedLabel = unspeakableNodeLabelHack(label);
     console.log('hacked Label = ' + hackedLabel);
     if (hackedLabel) {
       label = hackedLabel;
-    } else if (labelMode !== 'friendly') {
+    } else
+    */
+    if (labelMode !== 'friendly') {
       label = belAbbreviate(label);
     }
     console.log('node label = ' + label);
+
     var data = {
       id: index.toString(),
       name: label,
@@ -108,7 +111,7 @@ viewerApp.service('networkConverterService', ['ndexHelper', function (ndexHelper
     return data;
   };
 
-  var unspeakableNodeLabelHack = function (label) {
+ /* var unspeakableNodeLabelHack = function (label) {
 
     if (label === 'PROTEIN_ABUNDANCE(HGNC:BRAF,bel:SUBSTITUTION(bel:V,bel:600,bel:E))') {
       return 'BRAF V600E';
@@ -173,7 +176,7 @@ viewerApp.service('networkConverterService', ['ndexHelper', function (ndexHelper
     return false;
   };
 
-  // rules
+  // rules*/
   // baseTerm -> name
   // p(x) -> x
   // r(x) -> RNA x
@@ -186,19 +189,35 @@ viewerApp.service('networkConverterService', ['ndexHelper', function (ndexHelper
     if ('name' in node && node.name && node.name !== '') {
       //console.log(node.name);
       return node.name;
-    } else if ('represents' in node && node.represents && network.terms[node.represents]) {
-      return getFriendlyTermLabel(network.terms[node.represents], network);
+    } else if ('represents' in node && node.represents) {
+      return getFriendlyTermLabel(node.represents, network);
     } else {
       return 'unknown';
     }
   };
 
-  var getFriendlyTermLabel = function (term, network) {
+  var getTermById = function(termId, network){
+    var term = network.baseTerms[termId];
+    if (!term) {
+      term = network.functionTerms[termId];
+      if (!term){
+        term = network.reifiedEdgeTerms[termId];
+        if (!term) {
+          term = {};
+        }
+      }
+    }
+    console.log ('termId ' + termId + ' = '  + term);
+    return term;
+  };
+
+  var getFriendlyTermLabel = function (termId, network) {
+    var term = getTermById(termId, network);
     if (term.termType === 'BaseTerm') {
       return term.name;
     }
     else if (term.termType === 'FunctionTerm') {
-      var functionTerm = network.terms[term.functionTermId];
+      var functionTerm = network.baseTerms[term.functionTermId];
       if (!functionTerm) {
         console.log('no BaseTerm for functionTerm function by id ' + term.functionTermId);
         return;
@@ -211,10 +230,10 @@ viewerApp.service('networkConverterService', ['ndexHelper', function (ndexHelper
 
       for (var parameterIndex = 0; parameterIndex < sortedParameters.length; parameterIndex++) {
         var parameterId = term.parameterIds[sortedParameters[parameterIndex]];
-        var parameterTerm = network.terms[parameterId];
+        var parameterTerm = getTermById(parameterId, network);
 
         if (parameterTerm) {
-          var parameterLabel = getFriendlyTermLabel(parameterTerm, network);
+          var parameterLabel = getFriendlyTermLabel(parameterId, network);
           parameterList.push(parameterLabel);
         } else {
           console.log('no parameterTerm by id ' + parameterId);
