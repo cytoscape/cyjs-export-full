@@ -17,7 +17,7 @@ angular.module('cyViewerApp')
         var networkData;
 
         $scope.LAYOUTS = [
-            'preset', 'random', 'grid', 'circle', 'concentric', 'breadthfirst', 'cose'
+            'preset', 'cola', 'random', 'grid', 'circle', 'concentric', 'breadthfirst', 'cose'
         ];
 
 
@@ -59,6 +59,7 @@ angular.module('cyViewerApp')
             showOverlay: false,
             minZoom: 0.01,
             maxZoom: 200,
+            boxSelectionEnabled: true,
 
             layout: {
                 name: 'preset'
