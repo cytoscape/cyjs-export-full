@@ -1,3 +1,3 @@
-# Visualize JSON Data Exported from Cytoscape
+# Template code for _Export as Full Web Application_
 
-For more information, please read [wiki]().
+This old code is used to create the template for web export in Cytoscape Desktop.
